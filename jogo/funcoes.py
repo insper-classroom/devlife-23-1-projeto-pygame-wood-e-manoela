@@ -118,9 +118,9 @@ def recebe_eventos(state):
             if event.type == pygame.QUIT:
                 return False 
             if event.type == pygame.MOUSEBUTTONDOWN:
-                teta = 75 
+                teta = 32
                 teta_radianos = math.radians(teta)
-                vel_X = 0
+                vel_X = 20
                 vel_y = -40 * math.sin(teta_radianos)
                 state['vel_x'] = vel_X
                 state['vel_y'] = vel_y
