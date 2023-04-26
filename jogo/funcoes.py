@@ -41,10 +41,8 @@ def inicializa():
         'pos_y_pokebola' : 325,
         'atirou' : False,
         'pos_y_mira' : 20,
-        'vel_mira': 4
-        
-        
-
+        'vel_mira': 4,
+      
     }
     #v = 100
     #g = 2
@@ -101,6 +99,7 @@ def desenha(window, assets, state):
     window.blit(assets['passaro vila sesamo'], ((400, 40)))
     window.blit(assets['reta colorida'], ((20,20)))
     mira = pygame.draw.rect(window, (0,0,0), (17,state['pos_y_mira'], 40,4)) 
+    #vermelho = pygame.draw.rect(window, (255,0,0), (14.3, 43.1, 30.7, 114.7))
 
 
     caixas = [(800, 285), (860, 285), (920, 285), (830, 226), (890, 226), (860, 167), (580, 285), (520, 285), (548, 226), (310, 285)]
@@ -128,7 +127,8 @@ def recebe_eventos(state):
         if state['atirou']:
             state['pos_x_pokebola'] += state['vel_x']
             state['vel_y'] += 2 
-            state['pos_y_pokebola'] += state['vel_y']   
+            state['pos_y_pokebola'] += state['vel_y'] 
+            #if state['pos_y_mira'] == 
             #if event.type == pygame.KEYDOWN:
             #    if event.key == pygame.K_SPACE: 
             #        state['pos_y_mira'] += 1 
