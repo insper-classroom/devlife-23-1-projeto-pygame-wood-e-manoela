@@ -26,7 +26,7 @@ def inicializa():
         'tnt' : pygame.image.load("docs/imagens/surpresa.png"),
         'dragao branco' : pygame.image.load("docs/imagens/dragao branco.png"),
         'passaro vila sesamo' : pygame.image.load("docs/imagens/urubu amarelo.png"),
-        'reta colorida' : pygame.image.load("docs\imagens\cor.png"),
+        'reta colorida' : pygame.image.load("docs/imagens/nova_barra.png")
 
     }
 
@@ -40,15 +40,9 @@ def inicializa():
         'pos_x_pokebola' : 110,
         'pos_y_pokebola' : 325,
         'atirou' : False,
-        'pos_y_mira' : 126,
-        'pos_x_vermelho1' : 56,
-        'pos_y_vermelho1' : 72,
-        'pos_x_amarelo1' : 15, 
-        'pos_y_amarelo1' : 109, 
-        'pos_x_verde1': 13, 
-        'pos_y_verde1': 141, 
-        'pos_x_amarelo2' : 10,
-        'pos_y_amarelo2' : 205,
+        'pos_y_mira' : 20,
+        'vel_mira': 4
+        
         
 
     }
@@ -105,8 +99,8 @@ def desenha(window, assets, state):
     window.blit(assets['tnt'], ((420, 310)))
     window.blit(assets['dragao branco'], ((600, 20)))
     window.blit(assets['passaro vila sesamo'], ((400, 40)))
-    window.blit(assets['reta colorida'], ((20,0)))
-    mira = pygame.draw.rect(window, (0,0,0), (17,126, 40,4)) 
+    window.blit(assets['reta colorida'], ((20,20)))
+    mira = pygame.draw.rect(window, (0,0,0), (17,state['pos_y_mira'], 40,4)) 
 
 
     caixas = [(800, 285), (860, 285), (920, 285), (830, 226), (890, 226), (860, 167), (580, 285), (520, 285), (548, 226), (310, 285)]
@@ -115,14 +109,18 @@ def desenha(window, assets, state):
 
     pygame.display.update()
 
-def recebe_eventos(state):
+def recebe_eventos(state): 
+        if state['pos_y_mira'] < 20 or state['pos_y_mira'] >= 187:
+            state['vel_mira'] *= (-1)
+
+        state['pos_y_mira'] += state['vel_mira']
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return False 
             if event.type == pygame.MOUSEBUTTONDOWN:
-                teta = random.randint(10,80)
+                teta = 75 
                 teta_radianos = math.radians(teta)
-                vel_X = 40 * math.cos(teta_radianos) 
+                vel_X = 0
                 vel_y = -40 * math.sin(teta_radianos)
                 state['vel_x'] = vel_X
                 state['vel_y'] = vel_y
@@ -136,7 +134,6 @@ def recebe_eventos(state):
             #        state['pos_y_mira'] += 1 
             #        if state['pos_y_mira'] == 30:
             #            state['pos_y_mire'] -= 1 
-
 
         return True
 
