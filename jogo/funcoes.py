@@ -45,7 +45,8 @@ def inicializa():
         'caixas' : [(800, 285), (860, 285), (920, 285), (830, 226), (890, 226), (860, 167), (580, 285), (520, 285), (548, 226), (310, 285)],
         'lista_rect' : [],
         'tnts': [(690, 310), (420, 310)], 
-        'lista_rect2' : [] 
+        'lista_rect2' : [],
+        'max_bolinhas': 10 
     
     }
 
@@ -153,50 +154,16 @@ def recebe_eventos(state):
             if event.type == pygame.QUIT:
                 return False
             if event.type == pygame.MOUSEBUTTONDOWN:
-                #vermelho funcionando
-                if state['pos_y_mira'] > 16 and state['pos_y_mira'] < 130:
-                    teta = 80 
-                    teta_radianos = math.radians(teta) 
-                    vel_x = 50
-                    vel_y = -40 * math.sin(teta_radianos)
-                    #amarelo 1 funcionando 
-                if state['pos_y_mira'] > 130 and state['pos_y_mira'] <= 150: 
-                    teta = 23 
-                    teta_radianos = math.radians(teta) 
-                    vel_x = 20
-                    vel_y = -40 * math.sin(teta_radianos)
-                    #caixas.remove()
-                    #amarelo 2 funcionando
-                if state['pos_y_mira'] > 150 and state['pos_y_mira'] <=165: 
-                    teta = 45
-                    teta_radianos = math.radians(teta) 
-                    vel_x = 20 
-                    vel_y = -40 * math.sin(teta_radianos) 
-                    #amarelo 3 funcioando
-                if state['pos_y_mira'] > 165 and state['pos_y_mira'] < 180: 
-                    teta = 50 
-                    teta_radianos = math.radians(teta) 
-                    vel_x = 25 
-                    vel_y = -40 * math.sin(teta_radianos) 
-                    #verde 1 funcionando
-                if state['pos_y_mira'] > 180 and state['pos_y_mira'] < 202:
-                    teta = 32
-                    teta_radianos = math.radians(teta) 
-                    vel_x = 17
-                    vel_y = -40 * math.sin(teta_radianos)
-                    #verde 2  funcionando 
-                if state['pos_y_mira'] > 202 and state['pos_y_mira'] <= 225:
-                    teta = 44.5
-                    teta_radianos = math.radians(teta) 
-                    vel_x = 22.5
-                    vel_y = -40 * math.sin(teta_radianos) 
-                state['vel_x'] = vel_x
-                state['vel_y'] = vel_y
+                state['vel_x'] = 50*(state['pos_y_mira'] - 225.7) / -209.7
+                state['vel_y'] = -40 * math.sin(45)
                 state['atirou'] = True
         if state['atirou']:
             state['bolinha_pos'][0][0] += state['vel_x']
             state['vel_y'] += 2 
-            state['bolinha_pos'][0][1] += state['vel_y'] 
+            state['bolinha_pos'][0][1] += state['vel_y']
+
+        if len(state['bolinha_pos']) == 0:
+            return False 
         return True
 
 if __name__ == '__main__':
