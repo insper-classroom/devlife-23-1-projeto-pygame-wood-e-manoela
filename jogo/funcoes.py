@@ -41,15 +41,29 @@ def inicializa():
         'atirou' : False,
         'pos_y_mira' : 20,
         'vel_mira': 4,
-        'pos_y_verm' : 16,
-        'pos_y_verde' : 180,
-        'pos_y_amarelo': 130,
-      
+        'bolinha_pos' : [],
+        'caixas' : [(800, 285), (860, 285), (920, 285), (830, 226), (890, 226), (860, 167), (580, 285), (520, 285), (548, 226), (310, 285)],
+        'lista_rect' : [],
+        'tnts': [(690, 310), (420, 310)], 
+        'lista_rect2' : [] 
+    
     }
+
+    for pos in state['caixas']:
+        state['lista_rect'].append(pygame.Rect(pos[0], pos[1], 50, 50)) 
+    
+    for pos1 in state['tnts']: 
+        state['lista_rect2'].append(pygame.Rect(pos1[0], pos1[1], 50, 50))
+
+
+
+    for i in range(10): 
+        state['bolinha_pos'].append([110, 325]) 
     #v = 100
     #g = 2
 
     return window, assets, state
+ 
 
 def desenha(window, assets, state):
 
@@ -83,9 +97,9 @@ def desenha(window, assets, state):
     window.blit(assets['clefairy'], ((925, 289)))
     window.blit(assets['estrelinha'], ((810, 297)))
     window.blit(assets['eevee'], ((843, 234)))
+    window.blit(assets['pokebola'], (state['bolinha_pos'][0])) 
     window.blit(assets['pikachu'], ((886, 233)))
     window.blit(assets['mimikyu'], ((870, 173)))
-    window.blit(assets['pokebola'], ((state['pos_x_pokebola'], state['pos_y_pokebola'])))
     window.blit(assets['exclamação'], ((40, 210)))
     window.blit(assets['snorlax'], ((587, 285)))
     window.blit(assets['fofopreto'], ((528, 295)))
@@ -95,20 +109,21 @@ def desenha(window, assets, state):
     window.blit(assets['corações'], ((5, 400)))
     window.blit(assets['corações'], ((20, 400)))
     window.blit(assets['corações'], ((35, 400)))
-    window.blit(assets['tnt'], ((690, 310)))
-    window.blit(assets['tnt'], ((420, 310)))
     window.blit(assets['dragao branco'], ((600, 20)))
     window.blit(assets['passaro vila sesamo'], ((400, 40)))
     vermelho = pygame.draw.rect(window, (255,0,0), (14.3, 16, 25, 114.7))
     amarelo = pygame.draw.rect(window, (255,255,0), (14.3, 130, 25, 67.1))
     verde = pygame.draw.rect(window, (0, 128,0), (14.3, 180, 25, 45.7))
-        
-    mira = pygame.draw.rect(window, (0,0,0), (17,state['pos_y_mira'], 40,4)) 
 
+    mira = pygame.draw.rect(window, (0,0,0), (17,state['pos_y_mira'], 40,4))  
 
-    caixas = [(800, 285), (860, 285), (920, 285), (830, 226), (890, 226), (860, 167), (580, 285), (520, 285), (548, 226), (310, 285)]
-    for i in caixas:
+    #caixas = [(800, 285), (860, 285), (920, 285), (830, 226), (890, 226), (860, 167), (580, 285), (520, 285), (548, 226), (310, 285)]
+    for i in state['caixas']:
         window.blit(assets['caixa'], (i))
+        
+
+    for i in state['tnts']:
+        window.blit(assets['tnt'], (i))
 
     pygame.display.update()
 
@@ -117,37 +132,71 @@ def desenha(window, assets, state):
 def recebe_eventos(state): 
         if state['pos_y_mira'] < 20 or state['pos_y_mira'] >= 218:
             state['vel_mira'] *= (-1)
-
         state['pos_y_mira'] += state['vel_mira']
+        vel_x = 0
+        index = pygame.Rect(state['bolinha_pos'][0][0], state['bolinha_pos'][0][1], 15, 15).collidelist(state['lista_rect']) 
+        indice = pygame.Rect(state['bolinha_pos'][0][0], state['bolinha_pos'][0][1], 15, 15).collidelist(state['lista_rect2'])
+        if indice != -1:
+            del state['tnts'][indice] 
+            del state['lista_rect2'][indice]
+            del state['bolinha_pos'][0] 
+            state['atirou'] = False
+        if index != -1:
+            del state['caixas'][index]
+            del state['lista_rect'][index] 
+            del state['bolinha_pos'][0] 
+            state['atirou'] = False
+        if state['bolinha_pos'][0][1] > 450:
+            del state['bolinha_pos'][0] 
+            state['atirou'] = False
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                return False 
+                return False
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if state['pos_y_mira'] == state['pos_y_verde']: 
-                    teta = 53 
-                    state['pos_x_pokebola'] == 690 or state['pos_x_pokebola'] == 420 
-                elif state['pos_y_mira'] == state['pos_y_amarelo']:
-                    state['pos_x_pokebola'] == 800 or state['pos_x_pokebola'] == 860  or state['pos_x_pokebola'] == 920 or state['pos_x_pokebola'] == 830
-                elif state['pos_y_mira'] == state['pos_y_verm']:
-                    state['pos_x_pokebola'] == 10000
-                teta = 53
-                teta_radianos = math.radians(teta)
-                vel_X = 20
-                vel_y = -40 * math.sin(teta_radianos)
-                state['vel_x'] = vel_X
+                #vermelho funcionando
+                if state['pos_y_mira'] > 16 and state['pos_y_mira'] < 130:
+                    teta = 80 
+                    teta_radianos = math.radians(teta) 
+                    vel_x = 50
+                    vel_y = -40 * math.sin(teta_radianos)
+                    #amarelo 1 funcionando 
+                if state['pos_y_mira'] > 130 and state['pos_y_mira'] <= 150: 
+                    teta = 23 
+                    teta_radianos = math.radians(teta) 
+                    vel_x = 20
+                    vel_y = -40 * math.sin(teta_radianos)
+                    #caixas.remove()
+                    #amarelo 2 funcionando
+                if state['pos_y_mira'] > 150 and state['pos_y_mira'] <=165: 
+                    teta = 45
+                    teta_radianos = math.radians(teta) 
+                    vel_x = 20 
+                    vel_y = -40 * math.sin(teta_radianos) 
+                    #amarelo 3 funcioando
+                if state['pos_y_mira'] > 165 and state['pos_y_mira'] < 180: 
+                    teta = 50 
+                    teta_radianos = math.radians(teta) 
+                    vel_x = 25 
+                    vel_y = -40 * math.sin(teta_radianos) 
+                    #verde 1 funcionando
+                if state['pos_y_mira'] > 180 and state['pos_y_mira'] < 202:
+                    teta = 32
+                    teta_radianos = math.radians(teta) 
+                    vel_x = 17
+                    vel_y = -40 * math.sin(teta_radianos)
+                    #verde 2  funcionando 
+                if state['pos_y_mira'] > 202 and state['pos_y_mira'] <= 225:
+                    teta = 44.5
+                    teta_radianos = math.radians(teta) 
+                    vel_x = 22.5
+                    vel_y = -40 * math.sin(teta_radianos) 
+                state['vel_x'] = vel_x
                 state['vel_y'] = vel_y
                 state['atirou'] = True
         if state['atirou']:
-            state['pos_x_pokebola'] += state['vel_x']
+            state['bolinha_pos'][0][0] += state['vel_x']
             state['vel_y'] += 2 
-            state['pos_y_pokebola'] += state['vel_y'] 
-            #if state['pos_y_mira'] == 
-            #if event.type == pygame.KEYDOWN:
-            #    if event.key == pygame.K_SPACE: 
-            #        state['pos_y_mira'] += 1 
-            #        if state['pos_y_mira'] == 30:
-            #            state['pos_y_mire'] -= 1 
-
+            state['bolinha_pos'][0][1] += state['vel_y'] 
         return True
 
 if __name__ == '__main__':
