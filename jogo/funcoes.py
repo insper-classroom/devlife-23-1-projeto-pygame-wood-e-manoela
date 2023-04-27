@@ -26,7 +26,6 @@ def inicializa():
         'tnt' : pygame.image.load("docs/imagens/surpresa.png"),
         'dragao branco' : pygame.image.load("docs/imagens/dragao branco.png"),
         'passaro vila sesamo' : pygame.image.load("docs/imagens/urubu amarelo.png"),
-        'reta colorida' : pygame.image.load("docs/imagens/nova_barra.png")
 
     }
 
@@ -42,6 +41,9 @@ def inicializa():
         'atirou' : False,
         'pos_y_mira' : 20,
         'vel_mira': 4,
+        'pos_y_verm' : 16,
+        'pos_y_verde' : 180,
+        'pos_y_amarelo': 130,
       
     }
     #v = 100
@@ -97,9 +99,11 @@ def desenha(window, assets, state):
     window.blit(assets['tnt'], ((420, 310)))
     window.blit(assets['dragao branco'], ((600, 20)))
     window.blit(assets['passaro vila sesamo'], ((400, 40)))
-    window.blit(assets['reta colorida'], ((20,20)))
+    vermelho = pygame.draw.rect(window, (255,0,0), (14.3, 16, 25, 114.7))
+    amarelo = pygame.draw.rect(window, (255,255,0), (14.3, 130, 25, 67.1))
+    verde = pygame.draw.rect(window, (0, 128,0), (14.3, 180, 25, 45.7))
+        
     mira = pygame.draw.rect(window, (0,0,0), (17,state['pos_y_mira'], 40,4)) 
-    #vermelho = pygame.draw.rect(window, (255,0,0), (14.3, 43.1, 30.7, 114.7))
 
 
     caixas = [(800, 285), (860, 285), (920, 285), (830, 226), (890, 226), (860, 167), (580, 285), (520, 285), (548, 226), (310, 285)]
@@ -108,8 +112,10 @@ def desenha(window, assets, state):
 
     pygame.display.update()
 
+
+
 def recebe_eventos(state): 
-        if state['pos_y_mira'] < 20 or state['pos_y_mira'] >= 187:
+        if state['pos_y_mira'] < 20 or state['pos_y_mira'] >= 218:
             state['vel_mira'] *= (-1)
 
         state['pos_y_mira'] += state['vel_mira']
@@ -117,7 +123,14 @@ def recebe_eventos(state):
             if event.type == pygame.QUIT:
                 return False 
             if event.type == pygame.MOUSEBUTTONDOWN:
-                teta = 32
+                if state['pos_y_mira'] == state['pos_y_verde']: 
+                    teta = 53 
+                    state['pos_x_pokebola'] == 690 or state['pos_x_pokebola'] == 420 
+                elif state['pos_y_mira'] == state['pos_y_amarelo']:
+                    state['pos_x_pokebola'] == 800 or state['pos_x_pokebola'] == 860  or state['pos_x_pokebola'] == 920 or state['pos_x_pokebola'] == 830
+                elif state['pos_y_mira'] == state['pos_y_verm']:
+                    state['pos_x_pokebola'] == 10000
+                teta = 53
                 teta_radianos = math.radians(teta)
                 vel_X = 20
                 vel_y = -40 * math.sin(teta_radianos)
