@@ -168,7 +168,6 @@ def recebe_eventos(state):
         #caixas 
         if index != -1:
             for poke in state['pokemon'].values():
-               print(state['caixas'][index])
                if state['caixas'][index] == poke[0]:
                   state['pos_x_livre'] += 70
                   poke[1][0] = state['pos_x_livre']
