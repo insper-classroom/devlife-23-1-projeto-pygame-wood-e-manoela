@@ -41,8 +41,8 @@ def inicializa():
         'lista_rect' : [],
         'tnts': [(690, 310), (420, 310)], 
         'lista_rect2' : [],
-        'max_bolinhas': 10,
-        'texto_bolinhas': 10,
+        'max_bolinhas': 15,
+        'texto_bolinhas': 15,
         'corações' : [(5, 400), (20, 400), (35, 400)],
         'lista_rect3': []  
     
@@ -73,7 +73,7 @@ def inicializa():
 
 
 
-    for i in range(10): 
+    for i in range(15): 
         state['bolinha_pos'].append([110, 325]) 
 
 
@@ -154,7 +154,7 @@ def recebe_eventos(state):
         state['pos_y_mira'] += state['vel_mira']
         vel_x = 0
         index = pygame.Rect(state['bolinha_pos'][0][0], state['bolinha_pos'][0][1], 15, 15).collidelist(state['lista_rect']) 
-        indice = pygame.Rect(state['bolinha_pos'][0][0], state['bolinha_pos'][0][1], 15, 15).collidelist(state['lista_rect2'])
+        indice = pygame.Rect(state['bolinha_pos'][0][0], state['bolinha_pos'][0][1], 15, 15).collidelist(state['lista_rect2']) 
 
         #tnt
         if indice != -1:
