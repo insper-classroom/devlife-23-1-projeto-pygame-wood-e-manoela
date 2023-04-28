@@ -44,23 +44,26 @@ def inicializa():
         'max_bolinhas': 15,
         'texto_bolinhas': 15,
         'corações' : [(5, 400), (20, 400), (35, 400)],
-        'lista_rect3': []  
+        'lista_rect3': [],
+        'pos_x_livre': 70
     
     }
 
     pokemon = {
-        'rato' : [310, 285], 
-        'fofopreto' : [520, 285], 
-        'snorlax' : [580, 285],
-        'rosinha': [548, 226],
-        'estrelinha': [800, 285],
-        'bulbasaur': [860, 285],
-        'clefairy': [920, 285], 
-        'eevee': [830, 226],
-        'pikachu': [890, 226],
-        'mimikyu': [860, 167]
+                   # caixa       #pkemon
+        'rato' : [(310, 285), [319, 295]], 
+        'fofopreto' : [(520, 285), [528,295]], 
+        'snorlax' : [(580, 285), [587,285]],
+        'rosinha': [(548, 226), [563,235]],
+        'estrelinha': [(800, 285), [810,297]],
+        'bulbasaur': [(860, 285), [865, 289]],
+        'clefairy': [(920, 285), [925, 289]], 
+        'eevee': [(830, 226),[843, 234]],
+        'pikachu': [(890, 226), [886, 233]],
+        'mimikyu': [(860, 167), [870, 173]]
     }
 
+    state['pokemon'] = pokemon
 
     for pos in state['caixas']:
         state['lista_rect'].append(pygame.Rect(pos[0], pos[1], 50, 50)) 
@@ -104,20 +107,20 @@ def desenha(window, assets, state):
 
 
     window.blit(fundo_jogo, (0,0)) 
-    window.blit(assets['bulbasaur'], ((865, 289)))
+    window.blit(assets['bulbasaur'], (state['pokemon']['bulbasaur'][1]))
     window.blit(assets['brock'], ((5, 250)))
     window.blit(assets['estilingue'], ((100, 320)))
-    window.blit(assets['clefairy'], ((925, 289)))
-    window.blit(assets['estrelinha'], ((810, 297)))
-    window.blit(assets['eevee'], ((843, 234)))
+    window.blit(assets['clefairy'], (state['pokemon']['clefairy'][1]))
+    window.blit(assets['estrelinha'], (state['pokemon']['estrelinha'][1]))
+    window.blit(assets['eevee'], ((state['pokemon']['eevee'][1])))
     window.blit(assets['pokebola'], (state['bolinha_pos'][0])) 
-    window.blit(assets['pikachu'], ((886, 233)))
-    window.blit(assets['mimikyu'], ((870, 173)))
+    window.blit(assets['pikachu'], (state['pokemon']['pikachu'][1]))
+    window.blit(assets['mimikyu'], (state['pokemon']['mimikyu'][1]))
     window.blit(assets['exclamação'], ((40, 210)))
-    window.blit(assets['snorlax'], ((587, 285)))
-    window.blit(assets['fofopreto'], ((528, 295)))
-    window.blit(assets['rosinha'], ((563, 235)))
-    window.blit(assets['rato'], ((319,295)))
+    window.blit(assets['snorlax'], (state['pokemon']['snorlax'][1]))
+    window.blit(assets['fofopreto'], (state['pokemon']['fofopreto'][1]))
+    window.blit(assets['rosinha'], (state['pokemon']['rosinha'][1]))
+    window.blit(assets['rato'], (state['pokemon']['rato'][1]))
     #window.blit(assets['corações'], ((5, 400)))
     #window.blit(assets['corações'], ((35, 400)))
     #window.blit(assets['corações'], ((20, 400)))
@@ -160,13 +163,19 @@ def recebe_eventos(state):
         if indice != -1:
             del state['tnts'][indice] 
             del state['lista_rect2'][indice]
-            del state['bolinha_pos'][0] 
+            del state['bolinha_pos'][0]
             state['atirou'] = False
         #caixas 
         if index != -1:
+            for poke in state['pokemon'].values():
+               print(state['caixas'][index])
+               if state['caixas'][index] == poke[0]:
+                  state['pos_x_livre'] += 70
+                  poke[1][0] = state['pos_x_livre']
+                  poke[1][1] = 370
             del state['caixas'][index]
             del state['lista_rect'][index] 
-            del state['bolinha_pos'][0] 
+            del state['bolinha_pos'][0]
             state['atirou'] = False
         
         if state['bolinha_pos'][0][1] > 450:
