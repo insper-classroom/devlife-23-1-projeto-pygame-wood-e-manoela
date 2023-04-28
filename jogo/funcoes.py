@@ -1,5 +1,4 @@
 import pygame
-import random
 import math
 
 pygame.init()
@@ -43,7 +42,9 @@ def inicializa():
         'tnts': [(690, 310), (420, 310)], 
         'lista_rect2' : [],
         'max_bolinhas': 10,
-        'texto_bolinhas': 10 
+        'texto_bolinhas': 10,
+        'corações' : [(5, 400), (20, 400), (35, 400)],
+        'lista_rect3': []  
     
     }
 
@@ -67,12 +68,14 @@ def inicializa():
     for pos1 in state['tnts']: 
         state['lista_rect2'].append(pygame.Rect(pos1[0], pos1[1], 50, 50))
 
+    for pos3 in state['corações']:
+        state['lista_rect3'].append(pygame.Rect(pos3[0], pos3[1], 15, 15))
+
 
 
     for i in range(10): 
         state['bolinha_pos'].append([110, 325]) 
-    #v = 100
-    #g = 2
+
 
     return window, assets, state
  
@@ -98,7 +101,7 @@ def desenha(window, assets, state):
     assets['rato'] = pygame.transform.scale(assets['rato'], (40,40))
     assets['corações'] = pygame.transform.scale(assets['corações'], (20,20))
     assets['tnt'] = pygame.transform.scale(assets['tnt'], (40,40))
-    # assets['texto_bolinhas'] = pygame.transform.scale(state['texto_bolinhas'], (20,20))
+
 
     window.blit(fundo_jogo, (0,0)) 
     window.blit(assets['bulbasaur'], ((865, 289)))
@@ -115,9 +118,9 @@ def desenha(window, assets, state):
     window.blit(assets['fofopreto'], ((528, 295)))
     window.blit(assets['rosinha'], ((563, 235)))
     window.blit(assets['rato'], ((319,295)))
-    window.blit(assets['corações'], ((5, 400)))
-    window.blit(assets['corações'], ((20, 400)))
-    window.blit(assets['corações'], ((35, 400)))
+    #window.blit(assets['corações'], ((5, 400)))
+    #window.blit(assets['corações'], ((35, 400)))
+    #window.blit(assets['corações'], ((20, 400)))
     vermelho = pygame.draw.rect(window, (255,0,0), (14.3, 16, 25, 114.7))
     amarelo = pygame.draw.rect(window, (255,255,0), (14.3, 130, 25, 67.1))
     verde = pygame.draw.rect(window, (0, 128,0), (14.3, 180, 25, 45.7))
@@ -138,6 +141,9 @@ def desenha(window, assets, state):
     for i in state['tnts']:
         window.blit(assets['tnt'], (i))
 
+    for i in state['corações']:
+        window.blit(assets['corações'], (i))
+
     pygame.display.update()
 
 
@@ -149,6 +155,7 @@ def recebe_eventos(state):
         vel_x = 0
         index = pygame.Rect(state['bolinha_pos'][0][0], state['bolinha_pos'][0][1], 15, 15).collidelist(state['lista_rect']) 
         indice = pygame.Rect(state['bolinha_pos'][0][0], state['bolinha_pos'][0][1], 15, 15).collidelist(state['lista_rect2'])
+
         #tnt
         if indice != -1:
             del state['tnts'][indice] 
@@ -160,10 +167,8 @@ def recebe_eventos(state):
             del state['caixas'][index]
             del state['lista_rect'][index] 
             del state['bolinha_pos'][0] 
-            #if state['bolinha_pos'][0] in pokemon[]
-
-
             state['atirou'] = False
+        
         if state['bolinha_pos'][0][1] > 450:
             del state['bolinha_pos'][0] 
             state['atirou'] = False
@@ -182,7 +187,6 @@ def recebe_eventos(state):
             state['vel_y'] += 2 
             state['bolinha_pos'][0][1] += state['vel_y']
         
-        #if len(state['bolinha_pos']) 
 
         if len(state['bolinha_pos']) == 0:
             return False 
