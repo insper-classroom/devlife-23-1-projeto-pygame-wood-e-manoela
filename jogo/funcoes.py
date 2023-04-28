@@ -20,13 +20,9 @@ def inicializa():
         'snorlax' : pygame.image.load("docs/imagens/snorlax.png"),
         'fofopreto' : pygame.image.load("docs/imagens/cachorro].png"),
         'rosinha' : pygame.image.load("docs/imagens/meufav.png"),
-        'passaro azul' : pygame.image.load("docs/imagens/passro azul.png"),
         'rato' : pygame.image.load("docs/imagens/sato.png"),
         'corações': pygame.image.load("docs/imagens/corações.png"),
-        'tnt' : pygame.image.load("docs/imagens/surpresa.png"),
-        'dragao branco' : pygame.image.load("docs/imagens/dragao branco.png"),
-        'passaro vila sesamo' : pygame.image.load("docs/imagens/urubu amarelo.png"),
-
+        'tnt' : pygame.image.load("docs/imagens/surpresa.png")
     }
 
     window = pygame.display.set_mode((1000, 450), vsync=True, flags=pygame.SCALED)
@@ -46,9 +42,24 @@ def inicializa():
         'lista_rect' : [],
         'tnts': [(690, 310), (420, 310)], 
         'lista_rect2' : [],
-        'max_bolinhas': 10 
+        'max_bolinhas': 10,
+        'texto_bolinhas': 10 
     
     }
+
+    pokemon = {
+        'rato' : [310, 285], 
+        'fofopreto' : [520, 285], 
+        'snorlax' : [580, 285],
+        'rosinha': [548, 226],
+        'estrelinha': [800, 285],
+        'bulbasaur': [860, 285],
+        'clefairy': [920, 285], 
+        'eevee': [830, 226],
+        'pikachu': [890, 226],
+        'mimikyu': [860, 167]
+    }
+
 
     for pos in state['caixas']:
         state['lista_rect'].append(pygame.Rect(pos[0], pos[1], 50, 50)) 
@@ -84,12 +95,10 @@ def desenha(window, assets, state):
     assets['snorlax'] = pygame.transform.scale(assets['snorlax'], (50,50))
     assets['fofopreto'] = pygame.transform.scale(assets['fofopreto'], (45,45))
     assets['rosinha'] = pygame.transform.scale(assets['rosinha'], (40,40))
-    assets['passaro azul'] = pygame.transform.scale(assets['passaro azul'], (70,60))
     assets['rato'] = pygame.transform.scale(assets['rato'], (40,40))
     assets['corações'] = pygame.transform.scale(assets['corações'], (20,20))
     assets['tnt'] = pygame.transform.scale(assets['tnt'], (40,40))
-    assets['dragao branco'] = pygame.transform.scale(assets['dragao branco'], (50,50))
-    assets['passaro vila sesamo'] = pygame.transform.scale(assets['passaro vila sesamo'], (100,100)) 
+    # assets['texto_bolinhas'] = pygame.transform.scale(state['texto_bolinhas'], (20,20))
 
     window.blit(fundo_jogo, (0,0)) 
     window.blit(assets['bulbasaur'], ((865, 289)))
@@ -105,23 +114,26 @@ def desenha(window, assets, state):
     window.blit(assets['snorlax'], ((587, 285)))
     window.blit(assets['fofopreto'], ((528, 295)))
     window.blit(assets['rosinha'], ((563, 235)))
-    window.blit(assets['passaro azul'], ((700, 75)))
     window.blit(assets['rato'], ((319,295)))
     window.blit(assets['corações'], ((5, 400)))
     window.blit(assets['corações'], ((20, 400)))
     window.blit(assets['corações'], ((35, 400)))
-    window.blit(assets['dragao branco'], ((600, 20)))
-    window.blit(assets['passaro vila sesamo'], ((400, 40)))
     vermelho = pygame.draw.rect(window, (255,0,0), (14.3, 16, 25, 114.7))
     amarelo = pygame.draw.rect(window, (255,255,0), (14.3, 130, 25, 67.1))
     verde = pygame.draw.rect(window, (0, 128,0), (14.3, 180, 25, 45.7))
+    
+
+    fonte = pygame.font.SysFont('Arial', 20, bold=True)
+    texto = fonte.render(str(state['texto_bolinhas']), True, (0,0,0))
+    texto_x = 110
+    texto_y = 370
+    window.blit(texto, (texto_x, texto_y))
 
     mira = pygame.draw.rect(window, (0,0,0), (17,state['pos_y_mira'], 40,4))  
 
     #caixas = [(800, 285), (860, 285), (920, 285), (830, 226), (890, 226), (860, 167), (580, 285), (520, 285), (548, 226), (310, 285)]
     for i in state['caixas']:
         window.blit(assets['caixa'], (i))
-        
 
     for i in state['tnts']:
         window.blit(assets['tnt'], (i))
@@ -137,15 +149,20 @@ def recebe_eventos(state):
         vel_x = 0
         index = pygame.Rect(state['bolinha_pos'][0][0], state['bolinha_pos'][0][1], 15, 15).collidelist(state['lista_rect']) 
         indice = pygame.Rect(state['bolinha_pos'][0][0], state['bolinha_pos'][0][1], 15, 15).collidelist(state['lista_rect2'])
+        #tnt
         if indice != -1:
             del state['tnts'][indice] 
             del state['lista_rect2'][indice]
             del state['bolinha_pos'][0] 
             state['atirou'] = False
+        #caixas 
         if index != -1:
             del state['caixas'][index]
             del state['lista_rect'][index] 
             del state['bolinha_pos'][0] 
+            #if state['bolinha_pos'][0] in pokemon[]
+
+
             state['atirou'] = False
         if state['bolinha_pos'][0][1] > 450:
             del state['bolinha_pos'][0] 
@@ -153,14 +170,19 @@ def recebe_eventos(state):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return False
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 state['vel_x'] = 50*(state['pos_y_mira'] - 225.7) / -209.7
                 state['vel_y'] = -40 * math.sin(45)
                 state['atirou'] = True
+                state['texto_bolinhas'] -= 1
+                if state['texto_bolinhas'] < 0:
+                    return False 
         if state['atirou']:
             state['bolinha_pos'][0][0] += state['vel_x']
             state['vel_y'] += 2 
             state['bolinha_pos'][0][1] += state['vel_y']
+        
+        #if len(state['bolinha_pos']) 
 
         if len(state['bolinha_pos']) == 0:
             return False 
