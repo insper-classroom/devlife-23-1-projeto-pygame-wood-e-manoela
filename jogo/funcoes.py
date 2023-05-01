@@ -1,6 +1,5 @@
 import pygame
 import math
-
 pygame.init()
 
 def inicializa():
@@ -19,8 +18,7 @@ def inicializa():
         'snorlax' : pygame.image.load("docs/imagens/snorlax.png"),
         'fofopreto' : pygame.image.load("docs/imagens/cachorro].png"),
         'rosinha' : pygame.image.load("docs/imagens/meufav.png"),
-        'rato' : pygame.image.load("docs/imagens/sato.png"),
-        'corações': pygame.image.load("docs/imagens/corações.png")
+        'rato' : pygame.image.load("docs/imagens/sato.png")
     }
 
     window = pygame.display.set_mode((1000, 450), vsync=True, flags=pygame.SCALED)
@@ -30,22 +28,16 @@ def inicializa():
         'teta' : 0,
         'vel_x' : 0,
         'vel_y' : 0,
-        'pos_x_pokebola' : 110,
-        'pos_y_pokebola' : 325,
         'atirou' : False,
         'pos_y_mira' : 20,
         'vel_mira': 4,
         'bolinha_pos' : [],
         'caixas' : [(800, 285), (860, 285), (920, 285), (830, 226), (890, 226), (860, 167), (580, 285), (520, 285), (548, 226), (310, 285)],
         'lista_rect' : [],
-        'lista_rect2' : [],
         'max_bolinhas': 15,
         'texto_bolinhas': 15,
-        'corações' : [(5, 400), (20, 400), (35, 400)],
-        'lista_rect3': [],
         'pos_x_livre': 70,
         'tela' : 1
-    
     }
 
 
@@ -68,19 +60,10 @@ def inicializa():
     for pos in state['caixas']:
         state['lista_rect'].append(pygame.Rect(pos[0], pos[1], 50, 50)) 
     
-   
-
-    for pos3 in state['corações']:
-        state['lista_rect3'].append(pygame.Rect(pos3[0], pos3[1], 15, 15))
-
-
     for i in range(15): 
         state['bolinha_pos'].append([110, 325]) 
 
     return window, assets, state
-
-
-
 
 
 def desenha(window, assets, state):
@@ -109,7 +92,6 @@ def desenha(window, assets, state):
         assets['fofopreto'] = pygame.transform.scale(assets['fofopreto'], (45,45))
         assets['rosinha'] = pygame.transform.scale(assets['rosinha'], (40,40))
         assets['rato'] = pygame.transform.scale(assets['rato'], (40,40))
-        assets['corações'] = pygame.transform.scale(assets['corações'], (20,20))
         
         window.blit(fundo_jogo, (0,0)) 
         window.blit(assets['bulbasaur'], (state['pokemon']['bulbasaur'][1]))
@@ -141,8 +123,6 @@ def desenha(window, assets, state):
 
         for i in state['caixas']:
             window.blit(assets['caixa'], (i))
-        for i in state['corações']:
-            window.blit(assets['corações'], (i))
 
     elif state['tela'] == 4:
         window.blit(pygame.image.load("docs\imagens\gameover.png"), (0,0))
@@ -151,7 +131,6 @@ def desenha(window, assets, state):
         window.blit(pygame.image.load("docs\imagens\parabens.png"), (0,0)) 
 
     pygame.display.update()
-
 
 def recebe_eventos(state): 
         if state['tela'] == 1:
@@ -217,7 +196,6 @@ def recebe_eventos(state):
                 if len(state['bolinha_pos']) == 0: 
                     state['tela'] = 4  
  
-
         elif state['tela'] == 4:  
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
