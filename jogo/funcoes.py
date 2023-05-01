@@ -222,7 +222,7 @@ def recebe_eventos(state):
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     return False 
-                
+
         elif state['tela'] == 5:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
