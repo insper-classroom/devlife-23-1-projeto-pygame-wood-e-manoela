@@ -23,6 +23,8 @@ def inicializa():
         'enfeite1' : pygame.image.load("docs\imagens\enfeite1.png")
     }
 
+    pygame.display.set_caption('PokeSlingshot')
+    #pygame.display.set_icon("imagens\icone.png")
     window = pygame.display.set_mode((1000, 450), vsync=True, flags=pygame.SCALED)
     pygame.mixer.music.load("docs/musica/sound.mp3")
     pygame.mixer.music.play() 
@@ -36,8 +38,8 @@ def inicializa():
         'bolinha_pos' : [],
         'caixas' : [(800, 285), (860, 285), (920, 285), (830, 226), (890, 226), (860, 167), (580, 285), (520, 285), (548, 226), (310, 285)],
         'lista_rect' : [],
-        'max_bolinhas': 15,
-        'texto_bolinhas': 15,
+        'max_bolinhas': 20,
+        'texto_bolinhas': 20,
         'pos_x_livre': 70,
         'tela' : 1
     }
@@ -62,7 +64,7 @@ def inicializa():
     for pos in state['caixas']:
         state['lista_rect'].append(pygame.Rect(pos[0], pos[1], 50, 50)) 
     
-    for i in range(15): 
+    for i in range(20): 
         state['bolinha_pos'].append([110, 325]) 
 
     return window, assets, state
@@ -191,7 +193,9 @@ def recebe_eventos(state):
                         state['vel_y'] = -40 * math.sin(45)
                         state['atirou'] = True
                         state['texto_bolinhas'] -= 1
-                        if state['texto_bolinhas'] < 0:
+                        if state['texto_bolinhas'] <= 0 and len(state['caixas']) == 0:
+                            state['tela'] = 5
+                        elif state['texto_bolinhas'] <= 0 and len(state['caixas']) != 0:
                             state['tela'] = 4 
 
                 if state['atirou']:
