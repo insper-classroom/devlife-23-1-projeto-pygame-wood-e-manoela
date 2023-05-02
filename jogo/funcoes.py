@@ -18,7 +18,8 @@ def inicializa():
         'snorlax' : pygame.image.load("docs/imagens/snorlax.png"),
         'fofopreto' : pygame.image.load("docs/imagens/cachorro].png"),
         'rosinha' : pygame.image.load("docs/imagens/meufav.png"),
-        'rato' : pygame.image.load("docs/imagens/sato.png")
+        'rato' : pygame.image.load("docs/imagens/sato.png"),
+        'enfeite1' : pygame.image.load("docs\imagens\enfeite1.png")
     }
 
     window = pygame.display.set_mode((1000, 450), vsync=True, flags=pygame.SCALED)
@@ -92,7 +93,8 @@ def desenha(window, assets, state):
         assets['fofopreto'] = pygame.transform.scale(assets['fofopreto'], (45,45))
         assets['rosinha'] = pygame.transform.scale(assets['rosinha'], (40,40))
         assets['rato'] = pygame.transform.scale(assets['rato'], (40,40))
-        
+        assets['enfeite1'] = pygame.transform.scale(assets['enfeite1'], (70,40))
+
         window.blit(fundo_jogo, (0,0)) 
         window.blit(assets['bulbasaur'], (state['pokemon']['bulbasaur'][1]))
         window.blit(assets['brock'], ((5, 250)))
@@ -108,10 +110,13 @@ def desenha(window, assets, state):
         window.blit(assets['fofopreto'], (state['pokemon']['fofopreto'][1]))
         window.blit(assets['rosinha'], (state['pokemon']['rosinha'][1]))
         window.blit(assets['rato'], (state['pokemon']['rato'][1]))
-       
+        window.blit(assets['enfeite1'], (85, 40))
+        window.blit(assets['enfeite1'], (95, 70))
+
         vermelho = pygame.draw.rect(window, (255,0,0), (14.3, 16, 25, 114.7))
         amarelo = pygame.draw.rect(window, (255,255,0), (14.3, 130, 25, 67.1))
         verde = pygame.draw.rect(window, (0, 128,0), (14.3, 180, 25, 45.7))
+        mira = pygame.draw.rect(window, (0,0,0), (17,state['pos_y_mira'], 40,4))  
         
         fonte = pygame.font.SysFont('Arial', 20, bold=True)
         texto = fonte.render(str(state['texto_bolinhas']), True, (0,0,0))
@@ -119,7 +124,6 @@ def desenha(window, assets, state):
         texto_y = 370
         window.blit(texto, (texto_x, texto_y))
 
-        mira = pygame.draw.rect(window, (0,0,0), (17,state['pos_y_mira'], 40,4))  
 
         for i in state['caixas']:
             window.blit(assets['caixa'], (i))
