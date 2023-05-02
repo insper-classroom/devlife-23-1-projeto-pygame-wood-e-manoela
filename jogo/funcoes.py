@@ -24,7 +24,7 @@ def inicializa():
     }
 
     pygame.display.set_caption('PokeSlingshot')
-    #pygame.display.set_icon("imagens\icone.png")
+    pygame.display.set_icon(pygame.image.load("docs/imagens/icone.png"))
     window = pygame.display.set_mode((1000, 450), vsync=True, flags=pygame.SCALED)
     pygame.mixer.music.load("docs/musica/sound.mp3")
     pygame.mixer.music.play() 
