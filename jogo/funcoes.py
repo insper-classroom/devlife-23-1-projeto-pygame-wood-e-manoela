@@ -2,6 +2,9 @@ import pygame
 import math
 pygame.init()
 
+
+
+#a função cria pokemons no dict assets, cria a tela, muda o ícone e o nome da janela. No dict 'state', tem todas as informações que o jogo vai utilizar, como as caixas, quantidade das bolinhas, a física do jogo, etc. O dict 'pokemon' guarda cada pokemon numa caixa e suas respectivas posições. A função também cria as bolinhas.
 def inicializa():
     
     assets = {
@@ -70,6 +73,7 @@ def inicializa():
     return window, assets, state
 
 
+# a função desenha os objetos na janela, desenha as diversas telas, como de início, gameover e de parabéns por conseguir completar o jogo
 def desenha(window, assets, state):
     if state['tela'] == 1:
         window.blit(pygame.image.load("docs/imagens/tela iniciar instruções.png"), (0,0))
@@ -77,8 +81,10 @@ def desenha(window, assets, state):
     elif state['tela'] == 2: 
         window.blit(pygame.image.load("docs/imagens/instruções.png"), (0,0))  
 
+    #aqui a tela 3 é a tela do jogo, onde todos os objetos e física acontecerão
     elif state['tela'] == 3: 
 
+        #transforma a escala dos objetos/figuras
         fundo_jogo = pygame.image.load("docs/imagens/download.png")
         fundo_jogo = pygame.transform.scale(fundo_jogo, (1000, 450))
         assets['brock'] = pygame.transform.scale(pygame.image.load("docs/imagens/personagem.png"), (120,120))
@@ -98,6 +104,7 @@ def desenha(window, assets, state):
         assets['rato'] = pygame.transform.scale(assets['rato'], (40,40))
         assets['enfeite1'] = pygame.transform.scale(assets['enfeite1'], (70,40))
 
+        #define a posição dos pokemons e das figuras na tela
         window.blit(fundo_jogo, (0,0)) 
         window.blit(assets['bulbasaur'], (state['pokemon']['bulbasaur'][1]))
         window.blit(assets['brock'], ((5, 250)))
@@ -116,11 +123,13 @@ def desenha(window, assets, state):
         window.blit(assets['enfeite1'], (85, 40))
         window.blit(assets['enfeite1'], (95, 70))
 
+        #desenha a barra de força e a mira
         vermelho = pygame.draw.rect(window, (255,0,0), (14.3, 16, 25, 114.7))
         amarelo = pygame.draw.rect(window, (255,255,0), (14.3, 130, 25, 67.1))
         verde = pygame.draw.rect(window, (0, 128,0), (14.3, 180, 25, 45.7))
         mira = pygame.draw.rect(window, (0,0,0), (17,state['pos_y_mira'], 40,4))  
         
+        #desenha o texto da quantidade de pokebolas para serem lançadas 
         fonte = pygame.font.SysFont('Arial', 20, bold=True)
         texto = fonte.render(str(state['texto_bolinhas']), True, (0,0,0))
         texto_x = 110
@@ -140,13 +149,16 @@ def desenha(window, assets, state):
     pygame.display.update()
 
 def recebe_eventos(state): 
+        #tela 1: tela de início
         if state['tela'] == 1:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     return False
                 if event.type == pygame.MOUSEBUTTONDOWN: 
+                    #se o usuário clicar em 'iniciar', o jogo começa
                     if 127 <= event.pos[0] <= 127 + 291 and 129 <= event.pos[1] <= 129 + 110:
                         state['tela'] = 3 
+                    #se o usuário clicar em 'instruções', vai para a tela 2 (instruções)
                     if 605 <= event.pos[0] <= 605 + 320 and 134 <= event.pos[1] <= 134 + 98:
                         state['tela'] = 2 
         elif state['tela'] == 2:
@@ -154,8 +166,10 @@ def recebe_eventos(state):
                 if event.type == pygame.QUIT:
                     return False
                 if event.type == pygame.MOUSEBUTTONDOWN:
+                    #botão de voltar para a tela inicial
                     if 0 <= event.pos[0] <= 0 + 163 and 0 <= event.pos[1] <= 0 + 61: 
                         state['tela'] = 1
+        #aqui a mira tem uma determinada coordenada para não sair da barra de força e inverte a velocidade quando atinge o limite
         elif state['tela'] == 3:      
                 if state['pos_y_mira'] < 20 or state['pos_y_mira'] >= 218:
                     state['vel_mira'] *= (-1)
@@ -166,10 +180,12 @@ def recebe_eventos(state):
                     state['atirou'] = False
                 
                 index = -1 
+                #aqui verifica se a bolinha colidiu com a caixa
                 if len(state['bolinha_pos']) > 0:  
                     index = pygame.Rect(state['bolinha_pos'][0][0], state['bolinha_pos'][0][1], 15, 15).collidelist(state['lista_rect']) 
                    
                 #caixas 
+                #se colidiu com as caixas, remove a bolinha e as caixas da lista que elas estão
                 if index != -1:
                     for poke in state['pokemon'].values():
                         if state['caixas'][index] == poke[0]:
@@ -187,23 +203,29 @@ def recebe_eventos(state):
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
                         return False
-                    
+                    #física do jogo
                     if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                         state['vel_x'] = 50*(state['pos_y_mira'] - 225.7) / -209.7
                         state['vel_y'] = -40 * math.sin(45)
                         state['atirou'] = True
                         state['texto_bolinhas'] -= 1
+                        #se a quantidade de bolinhas for 0 e todas as caixas forem atingidas, o jogador vence
                         if state['texto_bolinhas'] <= -1 and len(state['caixas']) == 0:
                             state['tela'] = 5
+                        #se as pokebolas acabarem e ainda existirem caixas na tela, o jogador perde e vai para a tela de gameover
                         elif state['texto_bolinhas'] <= -1 and len(state['caixas']) != 0:
                             state['tela'] = 4 
 
+                #verifica a física do jogo
                 if state['atirou']:
                     state['bolinha_pos'][0][0] += state['vel_x']
                     state['vel_y'] += 2 
                     state['bolinha_pos'][0][1] += state['vel_y']
                 if len(state['bolinha_pos']) == 0: 
-                    state['tela'] = 4  
+                    if len(state['caixas']) == 0:
+                        state['tela'] = 5
+                    else:
+                        state['tela'] = 4 
  
         elif state['tela'] == 4:  
             for event in pygame.event.get():
@@ -216,8 +238,3 @@ def recebe_eventos(state):
                     return False 
                      
         return True
-
-if __name__ == '__main__':
-    window, assets, state = inicializa()
-    while recebe_eventos(state):
-        desenha(window, assets, state)
