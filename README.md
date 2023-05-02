@@ -13,4 +13,4 @@ Este é um projeto de um jogo semelhante à Angry Birds produzido por Manoela Sa
 - Mira: barra de força 
 - Fechar jogo: clicar no 'X' 
 --- 
-![Ajude](docs\imagens\gif.gif)
+![Ajude](docs/imagens/gif.gif)
