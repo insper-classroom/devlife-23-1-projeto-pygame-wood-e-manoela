@@ -4,6 +4,7 @@ import math
 pygame.init()
 
 def inicializa():
+    
     assets = {
         'brock' : pygame.image.load("docs/imagens/personagem.png"), 
         'caixa' : pygame.image.load("docs/imagens/caixa angry birds.png"),
