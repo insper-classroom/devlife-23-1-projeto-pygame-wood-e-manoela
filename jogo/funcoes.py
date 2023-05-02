@@ -193,9 +193,9 @@ def recebe_eventos(state):
                         state['vel_y'] = -40 * math.sin(45)
                         state['atirou'] = True
                         state['texto_bolinhas'] -= 1
-                        if state['texto_bolinhas'] <= 0 and len(state['caixas']) == 0:
+                        if state['texto_bolinhas'] <= -1 and len(state['caixas']) == 0:
                             state['tela'] = 5
-                        elif state['texto_bolinhas'] <= 0 and len(state['caixas']) != 0:
+                        elif state['texto_bolinhas'] <= -1 and len(state['caixas']) != 0:
                             state['tela'] = 4 
 
                 if state['atirou']:
